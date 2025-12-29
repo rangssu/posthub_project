@@ -1,4 +1,4 @@
-package com.posthub.post;
+package com.posthub.post.domain;
 
 import java.time.LocalDateTime;
 
@@ -14,5 +14,9 @@ public class Post {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
     }
 }
