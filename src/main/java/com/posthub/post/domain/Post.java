@@ -32,6 +32,11 @@ public class Post {
         this.viewCount = 0;
     }
 
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
     public void increaseViewCount() {
         this.viewCount++;
     }
