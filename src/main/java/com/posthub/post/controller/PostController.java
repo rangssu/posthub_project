@@ -19,7 +19,7 @@ public class PostController {
     // 글작성
     @PostMapping
     public ResponseEntity<Long> createPost(@RequestBody PostRequest command){
-        Long postId = postService.create(command.getTitle(), command.getTitle());
+        Long postId = postService.create(command.getTitle(), command.getContent());
 
         return ResponseEntity.ok(postId);
 
@@ -44,8 +44,5 @@ public class PostController {
         postService.delete(id);
         return ResponseEntity.ok().build();
     }
-}
-
-
 
 }

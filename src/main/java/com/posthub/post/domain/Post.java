@@ -22,7 +22,6 @@ public class Post {
     private int viewCount;
 
     public Post() {
-
     }
 
     public Post(String title, String content){
