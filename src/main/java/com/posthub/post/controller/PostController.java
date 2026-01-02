@@ -1,11 +1,9 @@
 package com.posthub.post.controller;
 
+import com.posthub.post.controller.dto.PostCommand;
 import com.posthub.post.service.PostService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/posts")
@@ -18,9 +16,12 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createPost(@RequestParam String title, @RequestParam String content) {
-        Long postId = postService.create(title, content);
+    public ResponseEntity<Long> createPost(@RequestBody PostCommand command){
+        Long postId = postService.create(command.getTitle(), command.getTitle());
+
         return ResponseEntity.ok(postId);
+
+
     }
 
 
