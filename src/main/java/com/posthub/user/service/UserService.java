@@ -29,8 +29,7 @@ public class UserService {
         user.updateUser(
                 requestDto.getPassword(),
                 requestDto.getName(),
-                requestDto.getNickname(),
-                requestDto.getEmail()
+                requestDto.getNickname()
         );
 
         return UserResponseDto.from(user);

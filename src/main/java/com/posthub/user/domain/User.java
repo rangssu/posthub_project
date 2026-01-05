@@ -43,7 +43,7 @@ public class User {
         this.email = email;
     }
 
-    public void updateUser(String password, String name, String nickname, String email){
+    public void updateUser(String password, String name, String nickname){
         if (password != null && !password.isBlank()) {
             this.password = password;
         }
@@ -53,9 +53,9 @@ public class User {
         if (nickname != null && !nickname.isBlank() ) {
             this.nickname = nickname;
         }
-        if (email != null && !email.isBlank() ) {
-            this.email = email;
-        }
+//        if (email != null && !email.isBlank() ) {
+//            this.email = email;
+//        }     이메일은 수정할 필요가 없잖아 ? 아마두.
 
 
 
