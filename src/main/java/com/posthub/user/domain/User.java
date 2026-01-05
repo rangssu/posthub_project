@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")     // 없으니까 안됨 왜지 ?
 public class User {
 
     @Id
@@ -40,6 +41,25 @@ public class User {
         this.name = name;
         this.nickname = nickname;
         this.email = email;
+    }
+
+    public void updateUser(String password, String name, String nickname, String email){
+        if (password != null && !password.isBlank()) {
+            this.password = password;
+        }
+        if (name!=null && !name.isBlank() ) {
+            this.name = name;
+        }
+        if (nickname != null && !nickname.isBlank() ) {
+            this.nickname = nickname;
+        }
+        if (email != null && !email.isBlank() ) {
+            this.email = email;
+        }
+
+
+
+
     }
 
 }
