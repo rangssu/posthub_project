@@ -28,7 +28,6 @@ public class UserService {
 
         user.updateUser(
                 requestDto.getPassword(),
-                requestDto.getName(),
                 requestDto.getNickname()
         );
 
