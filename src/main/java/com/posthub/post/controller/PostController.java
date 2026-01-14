@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -16,8 +18,8 @@ public class PostController {
 
     // 글작성
     @PostMapping
-    public ResponseEntity<Long> createPost(@RequestBody PostRequest command){
-        Long postId = postService.create(command.getTitle(), command.getContent());
+    public ResponseEntity<Long> createPost(@PathVariable Long boardId, @RequestParam Long userId,@RequestBody PostRequest command){
+        Long postId = postService.createPost(boardId, userId, command.getTitle(), command.getContent());
 
         return ResponseEntity.ok(postId);
 
@@ -41,6 +43,15 @@ public class PostController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         postService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // 글목록ㅇㄹ기
+    @GetMapping
+    public List<PostResponse> postList(@PathVariable Long boardId) {
+        return postService.getPostByBoard(boardId)
+                .stream()
+                .map(PostResponse::from)
+                .toList();
     }
 
 }
