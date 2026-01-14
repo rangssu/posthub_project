@@ -1,9 +1,7 @@
 package com.posthub.post.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.posthub.board.domain.Board;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +22,16 @@ public class Post {
     private LocalDateTime createdAt;
     private int viewCount;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
+
     public Post(String title, String content){
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
+        this.board = getBoard();    // 이렇게 하면 SetBoard 하지 않고 board id를 가져올수 있겠지 ?
     }
 
     public void update(String title, String content){

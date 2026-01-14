@@ -43,10 +43,7 @@ public class BoardController {
 
     // 탭 이름 수정
     @PutMapping("/{boardId}")
-    public BoardResponse update(
-            @PathVariable Long boardId,
-            @RequestBody @Valid BoardUpdateRequest req
-    ) {
+    public BoardResponse update(  @PathVariable Long boardId, @RequestBody @Valid BoardUpdateRequest req ) {
         return BoardResponse.from(boardService.boardUpdate(boardId, req));
     }
 
