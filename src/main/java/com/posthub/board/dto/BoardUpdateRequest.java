@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 public class BoardUpdateRequest {
 
     @NotBlank
-    private String tabName;
+    private String boardName;
 
-    public String getTabName() {
-        return tabName;
+    public String getBoardName() {
+        return boardName;
     }
 }

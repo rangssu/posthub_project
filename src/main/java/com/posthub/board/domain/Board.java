@@ -18,10 +18,10 @@ public class Board {
     private Long id;
 
     //탭이름
-    private String tabName;
+    private String boardName;
 
-    public void editTabName (String tabName) {
-        this.tabName = tabName;
+    public void editboardName (String boardName) {
+        this.boardName = boardName;
     }
 
 }

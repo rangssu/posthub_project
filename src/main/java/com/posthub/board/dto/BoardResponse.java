@@ -7,20 +7,20 @@ import lombok.Getter;
 public class BoardResponse {
 
     private Long id;
-    private String tabName;
+    private String boardName;
 
 //    protected BoardResponse() {}
 
-    public BoardResponse(Long id, String tabName) {
+    public BoardResponse(Long id, String boardName) {
         this.id = id;
-        this.tabName = tabName;
+        this.boardName = boardName;
     }
 
     public static BoardResponse from(Board board) {
         return new BoardResponse(
                 board.getId(),
-                board.getTabName()
-        );
+                board.getBoardName()
+            );
     }
 
 }

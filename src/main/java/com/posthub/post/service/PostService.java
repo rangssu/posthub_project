@@ -66,7 +66,7 @@ public class PostService {
 
     // 글 목록 읽기.
     public List<Post> getPostByBoard(Long boardId) {
-        return  postRepository.findByBoardIdOderByIdDesc(boardId);
+        return  postRepository.findByBoardIdOrderByIdDesc(boardId);
     }
 
 }

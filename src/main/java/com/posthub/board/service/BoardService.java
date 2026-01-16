@@ -39,7 +39,7 @@ public class BoardService {
 
     public Board boardUpdate(Long boardId, BoardUpdateRequest req) {
         Board board = findById(boardId);
-        board.editTabName(req.getTabName());
+        board.editboardName(req.getBoardName());
         return board;
     }
 
