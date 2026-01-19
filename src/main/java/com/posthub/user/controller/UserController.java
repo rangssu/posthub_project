@@ -1,6 +1,8 @@
 package com.posthub.user.controller;
 
 import com.posthub.user.domain.User;
+import com.posthub.user.dto.LoginRequest;
+import com.posthub.user.dto.LoginResponse;
 import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.service.UserService;
@@ -48,5 +50,11 @@ public class UserController {
     }
 
 
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(userService.login(request));
+    }
 
 }

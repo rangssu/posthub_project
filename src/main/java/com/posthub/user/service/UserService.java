@@ -1,6 +1,8 @@
 package com.posthub.user.service;
 
 import com.posthub.user.domain.User;
+import com.posthub.user.dto.LoginRequest;
+import com.posthub.user.dto.LoginResponse;
 import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.repository.UserRepository;
@@ -50,6 +52,18 @@ public class UserService {
     private User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다. id=" + id));
+    }
+
+    //로그인
+    public LoginResponse login (LoginRequest req){
+        User user = userRepository.findByLoginId(req.getLoginId())
+                .orElseThrow(()-> new IllegalArgumentException("아이디가 존재하지 않습니다."));
+
+        if (!user.getPassword().equals(req.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 옳지 않습니다.");
+        }
+
+        return new LoginResponse(user.getId(), user.getName());
     }
 
 }

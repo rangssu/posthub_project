@@ -20,6 +20,9 @@ public class Board {
     //탭이름
     private String boardName;
 
+    public Board(String boardName) {
+        this.boardName = boardName;
+    }
 
     public void editboardName (String boardName) {
         this.boardName = boardName;

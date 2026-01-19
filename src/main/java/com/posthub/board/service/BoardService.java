@@ -32,11 +32,13 @@ public class BoardService {
     }
 
     // 생성
+    @Transactional
     public Board boardCreate(BoardCreatRequest req) {
-        Board board = new Board();
+        Board board = new Board(req.getBoardName());
         return boardRepository.save(board);
     }
 
+    @Transactional
     public Board boardUpdate(Long boardId, BoardUpdateRequest req) {
         Board board = findById(boardId);
         board.editboardName(req.getBoardName());
@@ -44,6 +46,7 @@ public class BoardService {
     }
 
 
+    @Transactional
     public void delete(Long boardId) {
         Board board = findById(boardId);
         boardRepository.delete(board);

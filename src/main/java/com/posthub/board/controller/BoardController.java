@@ -35,7 +35,7 @@ public class BoardController {
         return BoardResponse.from(boardService.findById(boardId));
     }
 
-    // 탭 생성
+    // 보드 생성
     @PostMapping
     public BoardResponse create(@RequestBody @Valid BoardCreatRequest req) {
         return BoardResponse.from(boardService.boardCreate(req));
