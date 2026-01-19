@@ -2,9 +2,12 @@ package com.posthub.post.service;
 
 import com.posthub.board.domain.Board;
 import com.posthub.board.repository.BoardRepository;
-import com.posthub.post.controller.dto.PostRequest;
-import com.posthub.post.controller.dto.PostResponse;
+import com.posthub.common.exception.FobiddenException;
+import com.posthub.common.exception.NotFoundException;
+import com.posthub.post.dto.PostRequest;
+import com.posthub.post.dto.PostResponse;
 import com.posthub.post.domain.Post;
+import com.posthub.post.dto.PostUpdateRequest;
 import com.posthub.post.repository.PostRepository;
 import com.posthub.user.domain.User;
 import com.posthub.user.repository.UserRepository;
@@ -53,20 +56,39 @@ public class PostService {
 
     //Update 수정
     @Transactional
-    public void update(Long id, PostRequest request) {
-        Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("글을 찾을 수 없습니다."));
+    public void update(Long id, PostUpdateRequest request) {
+        Post post = getPostOrThrow(id);
+        validationAuthor(post, request.getUserId());
         post.update(request.getTitle(), request.getContent());
     }
 
     //Delete 삭제
     @Transactional
-    public void delete(Long id) {
-        postRepository.deleteById(id);
+    public void delete(Long postId, Long requesterUserId) {
+        Post post = getPostOrThrow(postId);
+        validationAuthor(post, requesterUserId);
+
+        postRepository.delete(post);
     }
 
     // 글 목록 읽기.
     public List<Post> getPostByBoard(Long boardId) {
         return  postRepository.findByBoardIdOrderByIdDesc(boardId);
+    }
+
+    @Transactional(readOnly = true)
+    public Post getPostOrThrow(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(()-> new NotFoundException("게시글을 찾을 수 없슴니다."));
+    }
+    // 작성자 확인 검증
+    private void validationAuthor (Post post, Long requesterUserId) {
+        if (requesterUserId == null) {
+            throw new IllegalArgumentException("user_id 가 없습니다.");
+        }
+        if (!post.getUser().equals(requesterUserId)){
+            throw new FobiddenException("작성자만 수정/삭제 할 수있습니다.");
+        }
     }
 
 }

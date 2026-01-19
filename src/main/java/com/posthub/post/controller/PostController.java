@@ -1,7 +1,9 @@
 package com.posthub.post.controller;
 
-import com.posthub.post.controller.dto.PostRequest;
-import com.posthub.post.controller.dto.PostResponse;
+import com.posthub.post.dto.PostDeleteRequest;
+import com.posthub.post.dto.PostRequest;
+import com.posthub.post.dto.PostResponse;
+import com.posthub.post.dto.PostUpdateRequest;
 import com.posthub.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,15 +35,15 @@ public class PostController {
 
     // 수정
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostRequest request) {
+    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostUpdateRequest request) {
         postService.update(id, request);
         return ResponseEntity.noContent().build();
     }
 
     // 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        postService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PostDeleteRequest req) {
+        postService.delete(id, req.getUserId());
         return ResponseEntity.noContent().build();
     }
 

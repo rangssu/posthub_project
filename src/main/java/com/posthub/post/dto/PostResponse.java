@@ -1,10 +1,7 @@
-package com.posthub.post.controller.dto;
+package com.posthub.post.dto;
 
-import com.posthub.board.domain.Board;
 import com.posthub.post.domain.Post;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

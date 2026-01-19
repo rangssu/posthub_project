@@ -1,4 +1,4 @@
-package com.posthub.post.controller.dto;
+package com.posthub.post.dto;
 
 import lombok.Getter;
 
