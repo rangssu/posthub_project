@@ -34,14 +34,14 @@ public class PostService {
 
     //Create 글작성
     @Transactional
-    public Long createPost (Long boardId, Long userId, String title, String content) {
+    public Long createPost (Long boardId, Long userId, PostRequest request) {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(()-> new IllegalArgumentException("보드 번호를 찾을수 없습니다 + " + boardId));
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException(("user not found + " + userId)));
 
-        Post post = new Post(board, user, title, content);
+        Post post = new Post(board, user, request.getTitle(), request.getContent());
         Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }
@@ -56,19 +56,22 @@ public class PostService {
 
     //Update 수정
     @Transactional
-    public void update(Long id, PostUpdateRequest request) {
-        Post post = getPostOrThrow(id);
-        validationAuthor(post, request.getUserId());
+    public void update(Long boardId, Long userId, Long postId, PostUpdateRequest request) {
+        Post post = getPostOrThrow(postId);
+        if (!post.getBoard().getId().equals(boardId)) {
+            throw new NotFoundException("해당 게시글은 이 게시판에 속하지 않습니다.");
+        }
+        validationAuthor(post, userId);
         post.update(request.getTitle(), request.getContent());
     }
 
     //Delete 삭제
     @Transactional
-    public void delete(Long postId, Long requesterUserId) {
+    public void delete(Long userId, Long postId) {
         Post post = getPostOrThrow(postId);
-        validationAuthor(post, requesterUserId);
+        validationAuthor(post, userId);
 
-        postRepository.delete(post);
+        postRepository.deleteById(postId);
     }
 
     // 글 목록 읽기.
@@ -83,10 +86,7 @@ public class PostService {
     }
     // 작성자 확인 검증
     private void validationAuthor (Post post, Long requesterUserId) {
-        if (requesterUserId == null) {
-            throw new IllegalArgumentException("user_id 가 없습니다.");
-        }
-        if (!post.getUser().equals(requesterUserId)){
+        if (!post.getUser().getId().equals(requesterUserId)) {
             throw new FobiddenException("작성자만 수정/삭제 할 수있습니다.");
         }
     }

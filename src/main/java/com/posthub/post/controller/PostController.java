@@ -7,6 +7,7 @@ import com.posthub.post.dto.PostUpdateRequest;
 import com.posthub.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,30 +21,31 @@ public class PostController {
 
     // 글작성
     @PostMapping
-    public ResponseEntity<Long> createPost(@PathVariable Long boardId, @RequestParam Long userId,@RequestBody PostRequest command){
-        Long postId = postService.createPost(boardId, userId, command.getTitle(), command.getContent());
+    public ResponseEntity<Long> createPost(@PathVariable Long boardId, @AuthenticationPrincipal Long userId, @RequestBody PostRequest request){
+        System.out.println("유저아이디 : " + userId);
+        Long postId = postService.createPost(boardId, userId, request);
 
         return ResponseEntity.ok(postId);
-
     }
 
     // 읽기
-    @GetMapping("/{id}")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.getPost(id));
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.getPost(postId));
     }
 
     // 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostUpdateRequest request) {
-        postService.update(id, request);
+    @PutMapping("/{postId}")
+    public ResponseEntity<Void> updatePost(@PathVariable Long boardId, @PathVariable Long postId, @AuthenticationPrincipal Long userId, @RequestBody PostUpdateRequest request) {
+        postService.update(boardId, userId, postId, request);
         return ResponseEntity.noContent().build();
     }
 
     // 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PostDeleteRequest req) {
-        postService.delete(id, req.getUserId());
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal Long userId, @PathVariable Long postId) {
+        System.out.println(userId);
+        postService.delete(userId, postId);
         return ResponseEntity.noContent().build();
     }
 
