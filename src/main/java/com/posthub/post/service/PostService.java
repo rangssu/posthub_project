@@ -2,8 +2,10 @@ package com.posthub.post.service;
 
 import com.posthub.board.domain.Board;
 import com.posthub.board.repository.BoardRepository;
+import com.posthub.comment.domain.Comment;
 import com.posthub.common.exception.FobiddenException;
 import com.posthub.common.exception.NotFoundException;
+import com.posthub.post.dto.PostListResponse;
 import com.posthub.post.dto.PostRequest;
 import com.posthub.post.dto.PostResponse;
 import com.posthub.post.domain.Post;
@@ -76,7 +78,20 @@ public class PostService {
 
     // 글 목록 읽기.
     public List<Post> getPostByBoard(Long boardId) {
+        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
+        Post post = posts.get(0);
+        List<Comment> comments = post.getComments();
+        int commentsCount = comments.size();
+
         return  postRepository.findByBoardIdOrderByIdDesc(boardId);
+    }
+
+    public List<PostListResponse> getPostByBoardV2(Long boardId) {
+        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
+
+        return posts.stream()
+                .map(p -> PostListResponse.from(p))
+                .toList();
     }
 
     @Transactional(readOnly = true)

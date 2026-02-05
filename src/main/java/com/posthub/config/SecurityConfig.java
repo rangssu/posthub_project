@@ -31,7 +31,7 @@ public class SecurityConfig {
                         // 로그인(토큰 발급) API는 열어둠
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
-
+                        .requestMatchers(HttpMethod.POST,"/api/*").permitAll()
                         // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
                 )
