@@ -1,9 +1,6 @@
 package com.posthub.post.controller;
 
-import com.posthub.post.dto.PostDeleteRequest;
-import com.posthub.post.dto.PostRequest;
-import com.posthub.post.dto.PostResponse;
-import com.posthub.post.dto.PostUpdateRequest;
+import com.posthub.post.dto.*;
 import com.posthub.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,11 +48,8 @@ public class PostController {
 
     // 글목록ㅇㄹ기
     @GetMapping("/boards/{boardId}/posts")
-    public List<PostResponse> postList(@PathVariable Long boardId) {
-        return postService.getPostByBoard(boardId)
-                .stream()
-                .map(PostResponse::from)
-                .toList();
+    public List<PostListResponse> postList(@PathVariable Long boardId) {
+        return postService.getPostByBoard(boardId);
     }
 
 }

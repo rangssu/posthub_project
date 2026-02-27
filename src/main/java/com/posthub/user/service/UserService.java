@@ -54,16 +54,16 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다. id=" + id));
     }
 
-    //로그인
-    public LoginResponse login (LoginRequest req){
-        User user = userRepository.findByLoginId(req.getLoginId())
-                .orElseThrow(()-> new IllegalArgumentException("아이디가 존재하지 않습니다."));
-
-        if (!user.getPassword().equals(req.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 옳지 않습니다.");
-        }
-
-        return new LoginResponse(user.getId(), user.getName());
-    }
+//    //로그인
+//    public LoginResponse login (LoginRequest req){
+//        User user = userRepository.findByLoginId(req.getLoginId())
+//                .orElseThrow(()-> new IllegalArgumentException("아이디가 존재하지 않습니다."));
+//
+//        if (!user.getPassword().equals(req.getPassword())) {
+//            throw new IllegalArgumentException("비밀번호가 옳지 않습니다.");
+//        }
+//
+//        return new LoginResponse(user.getId(), user.getName());
+//    }
 
 }

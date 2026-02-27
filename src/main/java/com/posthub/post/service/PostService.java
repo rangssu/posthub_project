@@ -76,17 +76,18 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    // 글 목록 읽기.
-    public List<Post> getPostByBoard(Long boardId) {
-        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
-        Post post = posts.get(0);
-        List<Comment> comments = post.getComments();
-        int commentsCount = comments.size();
+//    // 글 목록 읽기.
+//    public List<Post> getPostByBoard(Long boardId) {
+//        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
+//        Post post = posts.get(0);
+//        List<Comment> comments = post.getComments();
+//        int commentsCount = comments.size();
+//
+//        return  postRepository.findByBoardIdOrderByIdDesc(boardId);
+//    }
 
-        return  postRepository.findByBoardIdOrderByIdDesc(boardId);
-    }
-
-    public List<PostListResponse> getPostByBoardV2(Long boardId) {
+    // 글목록 읽기 수정본
+    public List<PostListResponse> getPostByBoard(Long boardId) {
         List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
 
         return posts.stream()

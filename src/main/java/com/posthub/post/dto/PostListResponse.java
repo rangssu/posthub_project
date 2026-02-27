@@ -26,24 +26,24 @@ public class PostListResponse {
 
 
     //dto
-    public List<PostListResponse> from(List<Post> posts) {
-
-
-        List<PostListResponse> responseList = new ArrayList<>();
-        responseList = posts.stream()
-                .map(p -> from(p))
-                .toList();
-
-        //List<PostListResponse> responseList = new ArrayList<>();
-
-//        for (int i = 0 ; i<posts.size() ; i++) {
-//            Post post = posts.get(i);
-//            PostListResponse response = from(post);
+//    public List<PostListResponse> from(List<Post> posts) {
 //
-//            responseList.add(response);
-//        }
-        return responseList;
-    }
+//
+//        List<PostListResponse> responseList = new ArrayList<>();
+//        responseList = posts.stream()
+//                .map(p -> from(p))
+//                .toList();
+//
+//        //List<PostListResponse> responseList = new ArrayList<>();
+//
+////        for (int i = 0 ; i<posts.size() ; i++) {
+////            Post post = posts.get(i);
+////            PostListResponse response = from(post);
+////
+////            responseList.add(response);
+////        }
+//        return responseList;
+//    }
 
     public static PostListResponse from(Post post) {
         return new PostListResponse(

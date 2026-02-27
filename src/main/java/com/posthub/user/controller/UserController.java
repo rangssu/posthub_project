@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // 아이디 생성
+    // 아이디 생성(회원가입)
     @PostMapping
     public ResponseEntity<Long> createUser(@RequestBody User user) {
         Long userId = userService.createUser(user);
@@ -50,11 +50,11 @@ public class UserController {
     }
 
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-
-        return ResponseEntity.ok(userService.login(request));
-    }
+//    // 로그인 -> /auth/AuthController로 이동했음.
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+//
+//        return ResponseEntity.ok(userService.login(request));
+//    }
 
 }
