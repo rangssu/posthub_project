@@ -2,8 +2,7 @@ package com.posthub.post.service;
 
 import com.posthub.board.domain.Board;
 import com.posthub.board.repository.BoardRepository;
-import com.posthub.comment.domain.Comment;
-import com.posthub.common.exception.FobiddenException;
+import com.posthub.common.exception.ForbiddenException;
 import com.posthub.common.exception.NotFoundException;
 import com.posthub.post.dto.PostListResponse;
 import com.posthub.post.dto.PostRequest;
@@ -58,11 +57,8 @@ public class PostService {
 
     //Update 수정
     @Transactional
-    public void update(Long boardId, Long userId, Long postId, PostUpdateRequest request) {
+    public void update(Long userId, Long postId, PostUpdateRequest request) {
         Post post = getPostOrThrow(postId);
-        if (!post.getBoard().getId().equals(boardId)) {
-            throw new NotFoundException("해당 게시글은 이 게시판에 속하지 않습니다.");
-        }
         validationAuthor(post, userId);
         post.update(request.getTitle(), request.getContent());
     }
@@ -103,7 +99,7 @@ public class PostService {
     // 작성자 확인 검증
     private void validationAuthor (Post post, Long requesterUserId) {
         if (!post.getUser().getId().equals(requesterUserId)) {
-            throw new FobiddenException("작성자만 수정/삭제 할 수있습니다.");
+            throw new ForbiddenException("작성자만 수정/삭제 할 수있습니다.");
         }
     }
 

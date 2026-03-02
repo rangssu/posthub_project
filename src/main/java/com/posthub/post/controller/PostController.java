@@ -33,8 +33,8 @@ public class PostController {
 
     // 수정
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<Void> updatePost(@PathVariable Long boardId, @PathVariable Long postId, @AuthenticationPrincipal Long userId, @RequestBody PostUpdateRequest request) {
-        postService.update(boardId, userId, postId, request);
+    public ResponseEntity<Void> updatePost(@PathVariable Long postId, @AuthenticationPrincipal Long userId, @RequestBody PostUpdateRequest request) {
+        postService.update(userId, postId, request);
         return ResponseEntity.noContent().build();
     }
 

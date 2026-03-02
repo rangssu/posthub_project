@@ -11,8 +11,9 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
+//    private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+private static final String SECRET_STRING = "this-is-posthub-super-secret-key-must-be-very-long-32-bytes";
+    private static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
 
 //    private static final SecretKey KEY =
 //            Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
