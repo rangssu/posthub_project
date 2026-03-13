@@ -37,10 +37,12 @@ public class SecurityConfig {
                 // 허용/차단 규칙
                 .authorizeHttpRequests(auth -> auth
                         // 로그인(토큰 발급) API는 열어둠
+
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/boards/**", "/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/health").permitAll()
                         // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
                 )

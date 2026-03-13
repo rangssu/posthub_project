@@ -37,8 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Authorization 헤더에서 Bearer 토큰 추출
         String token = resolveToken(request);
 
-        System.out.println("TOKEN = " + token);
-        System.out.println("VALID = " + (token != null && JwtUtil.validateToken(token)));
+//        System.out.println("TOKEN = " + token);
+//        System.out.println("VALID = " + (token != null && JwtUtil.validateToken(token)));
         if (token != null) System.out.println("USER_ID = " + JwtUtil.getUserId(token));
 
         /**
@@ -99,4 +99,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+
+        // /health 경로로 들어오는 요청은 이 필터를 무시하고 통과시킴
+        if (path.equals("/health")) {
+            return true;
+        }
+
+        // 필요하다면 로그인이나 회원가입 경로도 여기에 추가할 수 있습니다.
+        // if (path.startsWith("/api/auth/login") || path.equals("/api/users")) {
+        //     return true;
+        // }
+
+        return false;
+    }
 }
