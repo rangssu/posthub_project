@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/boards/**", "/api/posts/**").permitAll()
                         // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
                 )
@@ -53,7 +54,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // 리액트 주소
+        configuration.setAllowedOrigins(List.of("http://localhost:5173",
+                "http://boxblognote.link",
+                "http://boxblognote.link:5173",
+                "https://boxblognote.link" // 나중에 HTTPS 적용을 대비해 미리 추가
+
+        )); // 리액트 주소
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // OPTIONS 필수!
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));

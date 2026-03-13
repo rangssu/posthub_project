@@ -14,6 +14,7 @@ public class PostResponse {
     private final LocalDateTime createdAt;
     private final int viewCount;
     private final Long boardId;
+    private final Long userId;
 // commentResponse 해서 List 로 보여주면 좋음.
 
     public PostResponse(Post post) {
@@ -23,6 +24,7 @@ public class PostResponse {
         this.createdAt = post.getCreatedAt();
         this.boardId = post.getBoard().getId();
         this.viewCount = post.getViewCount();
+        this.userId = post.getUser().getId();
     }
 
 

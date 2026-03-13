@@ -48,11 +48,17 @@ public class PostService {
     }
 
     //Read 읽기
-    public PostResponse getPost(Long id) {
-        // 글 없을경우 예외
-        Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("글 없음"));
-        post.increaseViewCount(); //조회수
-        return new PostResponse(post);
+    @Transactional
+    public PostResponse getPost(Long postId) {
+        // 1. DB에서 게시글을 찾아옵니다. (이때 조회수 0)
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        // 2. 조회수를 1 올립니다. (이때 메모리 안에서만 1)
+        post.increaseViewCount();
+
+        // 3. @Transactional이 붙어있기 때문에, 이 메서드가 끝날 때 Spring이 알아서 바뀐 값(1)을 DB에 UPDATE 해줍니다.
+        return PostResponse.from(post);
     }
 
     //Update 수정
@@ -83,6 +89,7 @@ public class PostService {
 //    }
 
     // 글목록 읽기 수정본
+    @Transactional
     public List<PostListResponse> getPostByBoard(Long boardId) {
         List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
 

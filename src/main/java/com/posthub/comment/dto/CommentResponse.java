@@ -12,12 +12,14 @@ public class CommentResponse {
     private final Long userId;
     private final String content;
     private final LocalDateTime createAt;
+    private final String nickname;
 
-    public CommentResponse(Long commentId, Long userId, String content, LocalDateTime createAt) {
+    public CommentResponse(Long commentId, Long userId, String content, LocalDateTime createAt, String nickname) {
         this.commentId = commentId;
         this.userId = userId;
         this.content = content;
         this.createAt = createAt;
+        this.nickname = nickname;
     }
 
     public static CommentResponse from(Comment comment) {
@@ -25,7 +27,8 @@ public class CommentResponse {
                 comment.getId(),
                 comment.getUser().getId(),
                 comment.getContent(),
-                comment.getCreateAt()
+                comment.getCreateAt(),
+                comment.getUser().getNickname()
         );
     }
 

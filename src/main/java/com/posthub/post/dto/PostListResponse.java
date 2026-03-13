@@ -1,25 +1,27 @@
 package com.posthub.post.dto;
 
 import com.posthub.post.domain.Post;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Getter
 public class PostListResponse {
     private Long id;
     private String title;
     private int viewCount;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     private String userName;
     private int commentsSize;
 
-    public PostListResponse(Long id, String title, int viewCount, LocalDateTime createAt, String userName, int commentsSize) {
+    public PostListResponse(Long id, String title, int viewCount, LocalDateTime createdAt, String userName, int commentsSize) {
         this.id = id;
         this.title = title;
         this.viewCount = viewCount;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
         this.userName = userName;
         this.commentsSize = commentsSize;
     }
