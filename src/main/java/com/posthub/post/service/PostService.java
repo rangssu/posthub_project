@@ -12,6 +12,8 @@ import com.posthub.post.dto.PostUpdateRequest;
 import com.posthub.post.repository.PostRepository;
 import com.posthub.user.domain.User;
 import com.posthub.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,14 +91,21 @@ public class PostService {
 //    }
 
     // 글목록 읽기 수정본
-    @Transactional
-    public List<PostListResponse> getPostByBoard(Long boardId) {
-        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
+//    @Transactional
+//    public List<PostListResponse> getPostByBoard(Long boardId) {
+//        List<Post> posts = postRepository.findByBoardIdOrderByIdDesc(boardId);
+//
+//        return posts.stream()
+//                .map(p -> PostListResponse.from(p))
+//                .toList();
+//    }
 
-        return posts.stream()
-                .map(p -> PostListResponse.from(p))
-                .toList();
+    // 긁 읽기 페이징 버전
+    public Page<PostListResponse> getPostByBoard(Long boardId, Pageable pageable) {
+        Page<Post> postPage = postRepository.findByBoardIdOrderByIdDesc(boardId, pageable);
+        return postPage.map(PostListResponse::from);
     }
+
 
     @Transactional(readOnly = true)
     public Post getPostOrThrow(Long postId) {

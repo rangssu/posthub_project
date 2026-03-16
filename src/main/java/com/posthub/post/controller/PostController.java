@@ -3,6 +3,9 @@ package com.posthub.post.controller;
 import com.posthub.post.dto.*;
 import com.posthub.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +51,8 @@ public class PostController {
 
     // 글목록ㅇㄹ기
     @GetMapping("/boards/{boardId}/posts")
-    public List<PostListResponse> postList(@PathVariable Long boardId) {
-        return postService.getPostByBoard(boardId);
+    public Page<PostListResponse> postList(@PathVariable Long boardId, @PageableDefault(size = 10) Pageable pageable) {
+        return postService.getPostByBoard(boardId, pageable);
     }
 
 }
