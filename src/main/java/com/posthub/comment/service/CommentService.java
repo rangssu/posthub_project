@@ -55,7 +55,7 @@ public class CommentService {
         Comment comment = getCommentOrThrow(commentId);
         validateAuthorOrThrow(comment, userId);
 
-        commentRepository.delete(comment);
+        commentRepository.deleteById(commentId);
     }
 
 
