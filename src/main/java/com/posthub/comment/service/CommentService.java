@@ -50,6 +50,7 @@ public class CommentService {
         comment.updateContent(request.getContent());
     }
 
+    @Transactional
     public void deleteComments(Long userId, Long commentId) {
         Comment comment = getCommentOrThrow(commentId);
         validateAuthorOrThrow(comment, userId);
