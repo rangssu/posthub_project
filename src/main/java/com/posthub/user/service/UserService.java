@@ -7,8 +7,10 @@ import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,16 @@ public class UserService {
     // 메서드 생성시 이름으로 기능을 알 수 있게 생성하기.
     @Transactional
     public Long createUser(User user) {
+        // 👇 [추가] 아이디 중복 체크
+        if (userRepository.existsByLoginId(user.getLoginId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다.");
+        }
+
+        // 👇 [추가] 닉네임 중복 체크
+        if (userRepository.existsByNickname(user.getNickname())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다.");
+        }
+
         User savedUser = userRepository.save(user);
         return savedUser.getId();
     }
@@ -27,6 +39,13 @@ public class UserService {
     @Transactional
     public UserResponseDto updateUser(Long id, UserUpdateRequestDto requestDto) {
         User user = findUserById(id);
+
+        // 👇 [추가] 닉네임을 수정하려고 할 때, 기존 본인 닉네임과 다르면서 이미 존재하는 닉네임인지 체크
+        if (requestDto.getNickname() != null && !requestDto.getNickname().equals(user.getNickname())) {
+            if (userRepository.existsByNickname(requestDto.getNickname())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다.");
+            }
+        }
 
         user.updateUser(
                 requestDto.getPassword(),

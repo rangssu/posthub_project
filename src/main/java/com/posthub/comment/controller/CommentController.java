@@ -40,10 +40,12 @@ public class CommentController {
     }
 
 
+    //삭제
     @DeleteMapping("/comments/{commentsId}")
     public ResponseEntity<Void> deleteComments (@AuthenticationPrincipal Long userId, @PathVariable Long commentsId) {
+        System.out.print("매핑 들어옴.");
         commentService.deleteComments(userId,commentsId);
-
+        System.out.print("서비스 끝남");
         return ResponseEntity.noContent().build();
     }
 

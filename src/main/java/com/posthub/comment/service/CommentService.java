@@ -52,9 +52,11 @@ public class CommentService {
 
     @Transactional
     public void deleteComments(Long userId, Long commentId) {
+        System.out.print("서비스 들어옴");
         Comment comment = getCommentOrThrow(commentId);
+        System.out.print("2번 지남");
         validateAuthorOrThrow(comment, userId);
-
+        System.out.print("3번 지남.");
         commentRepository.deleteById(commentId);
     }
 

@@ -1,6 +1,8 @@
 package com.posthub.user.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,22 +18,29 @@ public class User {
     private Long id;
 
     // 아이디
+    @NotBlank(message = "아이디는 공백일 수 없습니다.")
+    @Size(min = 4, max = 20, message = "아이디는 4자 이상 20자 이하여야 합니다.")
     @Column(nullable = false, unique = true)
     private String loginId;
 
     // 비밀번호
+    @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
+    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     @Column(nullable = false)
     private String password;
 
     //이름
+    @NotBlank(message = "이름은 공백일 수 없습니다.")
     @Column(nullable = false)
     private String name;
 
     //닉네임
+    @NotBlank(message = "닉네임은 공백일 수 없습니다.")
     @Column(nullable = false, unique = true)
     private String nickname;
 
     //이메일
+    @NotBlank(message = "이메일은 공백일 수 없습니다.")
     @Column(nullable = false, unique = true)
     private String email;
 

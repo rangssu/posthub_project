@@ -6,6 +6,7 @@ import com.posthub.user.dto.LoginResponse;
 import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
 
     // 아이디 생성(회원가입)
     @PostMapping
-    public ResponseEntity<Long> createUser(@RequestBody User user) {
+    public ResponseEntity<Long> createUser(@Valid @RequestBody User user) {
         Long userId = userService.createUser(user);
         return ResponseEntity.ok(userId);
     }
@@ -35,7 +36,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
-            @RequestBody UserUpdateRequestDto requestDto
+            @Valid @RequestBody UserUpdateRequestDto requestDto
     ) {
         UserResponseDto updated = userService.updateUser(id, requestDto);
         return ResponseEntity.ok(updated);
