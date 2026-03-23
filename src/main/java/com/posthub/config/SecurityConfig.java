@@ -40,7 +40,10 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/api/users","/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/boards/**", "/api/posts/**").permitAll()
+
+                        // 👇 [수정됨] 정확히 떨어지는 경로인 "/api/boards"와 "/api/posts"를 반드시 명시해야 합니다!
+                        .requestMatchers(HttpMethod.GET, "/api/boards", "/api/boards/**", "/api/posts", "/api/posts/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/health").permitAll()
                         // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
