@@ -23,11 +23,15 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
 
     // 👇 [추가됨] 불필요한 데이터(content 등)를 제외하고 필요한 컬럼만 딱 맞춰서 DTO로 즉시 변환하는 최적화 쿼리
-    @Query("SELECT new com.posthub.post.dto.PostListResponse(" +
-            "p.id, p.title, p.viewCount, p.createdAt, u.id, u.nickname, size(p.comments)) " +
-            "FROM Post p " +
-            "JOIN p.user u " +
-            "WHERE p.board.id = :boardId")
+    @Query(
+            value = "SELECT new com.posthub.post.dto.PostListResponse(" +
+                    "p.id, p.title, p.viewCount, p.createdAt, u.id, u.nickname, size(p.comments)) " +
+                    "FROM Post p " +
+                    "JOIN p.user u " +
+                    "WHERE p.board.id = :boardId " +
+                    "ORDER BY p.id DESC",
+            countQuery = "SELECT count(p) FROM Post p WHERE p.board.id = :boardId"
+    )
     Page<PostListResponse> findOptimizedByBoardId(@Param("boardId") Long boardId, Pageable pageable);
 
 }

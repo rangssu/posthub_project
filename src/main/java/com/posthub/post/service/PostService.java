@@ -102,8 +102,9 @@ public class PostService {
 
     // 긁 읽기 페이징 버전
     public Page<PostListResponse> getPostByBoard(Long boardId, Pageable pageable) {
-        Page<Post> postPage = postRepository.findByBoardIdOrderByIdDesc(boardId, pageable);
-        return postPage.map(PostListResponse::from);
+//        Page<Post> postPage = postRepository.findByBoardIdOrderByIdDesc(boardId, pageable);
+//        return postPage.map(PostListResponse::from);
+        return postRepository.findOptimizedByBoardId(boardId, pageable);
     }
 
 

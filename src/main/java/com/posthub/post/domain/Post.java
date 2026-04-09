@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+// 👇 [여기 추가됨!] board_id와 id DESC를 묶어 완벽한 커버링/복합 인덱스를 생성합니다.
+@Table(name = "post", indexes = {
+        @Index(name = "idx_board_id_id", columnList = "board_id, id DESC")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
