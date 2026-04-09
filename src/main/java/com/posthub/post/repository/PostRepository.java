@@ -1,11 +1,13 @@
 package com.posthub.post.repository;
 
 import com.posthub.post.domain.Post;
+import com.posthub.post.dto.PostListResponse; // 👇 [추가] DTO 임포트
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param; // 👇 [추가] Param 임포트
 
 import java.util.List;
 
@@ -19,6 +21,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      */
     @EntityGraph(attributePaths = {"user"})
     Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
+
+    // 👇 [추가됨] 불필요한 데이터(content 등)를 제외하고 필요한 컬럼만 딱 맞춰서 DTO로 즉시 변환하는 최적화 쿼리
+    @Query("SELECT new com.posthub.post.dto.PostListResponse(" +
+            "p.id, p.title, p.viewCount, p.createdAt, u.id, u.nickname, size(p.comments)) " +
+            "FROM Post p " +
+            "JOIN p.user u " +
+            "WHERE p.board.id = :boardId")
+    Page<PostListResponse> findOptimizedByBoardId(@Param("boardId") Long boardId, Pageable pageable);
 
 }
 

@@ -14,15 +14,17 @@ public class PostListResponse {
     private String title;
     private int viewCount;
     private LocalDateTime createdAt;
-    private String userName;
+    private Long userId;         // 추가됨: 유저 ID
+    private String nickname; // 추가됨: 유저 닉네임 (userName 대체)
     private int commentsSize;
 
-    public PostListResponse(Long id, String title, int viewCount, LocalDateTime createdAt, String userName, int commentsSize) {
+    public PostListResponse(Long id, String title, int viewCount, LocalDateTime createdAt, Long userId, String nickname, int commentsSize) {
         this.id = id;
         this.title = title;
         this.viewCount = viewCount;
         this.createdAt = createdAt;
-        this.userName = userName;
+        this.userId = userId;
+        this.nickname = nickname;
         this.commentsSize = commentsSize;
     }
 
@@ -38,12 +40,12 @@ public class PostListResponse {
 //
 //        //List<PostListResponse> responseList = new ArrayList<>();
 //
-////        for (int i = 0 ; i<posts.size() ; i++) {
-////            Post post = posts.get(i);
-////            PostListResponse response = from(post);
-////
-////            responseList.add(response);
-////        }
+    ////        for (int i = 0 ; i<posts.size() ; i++) {
+    ////            Post post = posts.get(i);
+    ////            PostListResponse response = from(post);
+    ////
+    ////            responseList.add(response);
+    ////        }
 //        return responseList;
 //    }
 
@@ -53,7 +55,8 @@ public class PostListResponse {
                 post.getTitle(),
                 post.getViewCount(),
                 post.getCreatedAt(),
-                post.getUser().getName(),
+                post.getUser().getId(),        // 유저 ID 매핑
+                post.getUser().getNickname(),  // 닉네임 매핑
                 post.getComments().size()
         );
     }
@@ -116,6 +119,5 @@ public class PostListResponse {
 
 
  */
-
 
 }
