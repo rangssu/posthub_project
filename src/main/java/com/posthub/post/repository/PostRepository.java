@@ -4,23 +4,22 @@ import com.posthub.post.domain.Post;
 import com.posthub.post.dto.PostListResponse; // 👇 [추가] DTO 임포트
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param; // 👇 [추가] Param 임포트
 
-import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 //    Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
 
     /**
-     * @EntityGraph는 쿼리 실행 시 연관된 엔티티를 한 번에 조인(Join)해서 가져오게 합니다.
+     * @ EntityGraph는 쿼리 실행 시 연관된 엔티티를 한 번에 조인(Join)해서 가져오게 합니다.
      * 여기서는 Post를 조회할 때 작성자 정보인 'user'를 미리 패치 조인(Fetch Join)하여
      * PostListResponse로 변환할 때 발생하는 N+1 문제를 방지합니다.
      */
-    @EntityGraph(attributePaths = {"user"})
-    Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
+//    @EntityGraph(attributePaths = {"user"})
+//    Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
 
     // 👇 [추가됨] 불필요한 데이터(content 등)를 제외하고 필요한 컬럼만 딱 맞춰서 DTO로 즉시 변환하는 최적화 쿼리
     @Query(
@@ -33,6 +32,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             countQuery = "SELECT count(p) FROM Post p WHERE p.board.id = :boardId"
     )
     Page<PostListResponse> findOptimizedByBoardId(@Param("boardId") Long boardId, Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Post p SET p.viewCount = p.viewCount + :increaseCount WHERE p.id = :postId")
+    void updateViewCount(@Param("postId") Long postId, @Param("increaseCount") Long increaseCount);
+
 
 }
 

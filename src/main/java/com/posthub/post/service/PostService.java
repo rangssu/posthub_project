@@ -12,28 +12,32 @@ import com.posthub.post.dto.PostUpdateRequest;
 import com.posthub.post.repository.PostRepository;
 import com.posthub.user.domain.User;
 import com.posthub.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)  //트랜잭션 노션 확인.
+@RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final StringRedisTemplate redisTemplate;
 
-    public PostService(PostRepository postRepository,
-                       BoardRepository boardRepsitory,
-                       UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.boardRepository = boardRepsitory;
-        this.userRepository = userRepository;
-    }
+//    public PostService(PostRepository postRepository,
+//                       BoardRepository boardRepsitory,
+//                       UserRepository userRepository) {
+//        this.postRepository = postRepository;
+//        this.boardRepository = boardRepsitory;
+//        this.userRepository = userRepository;
+//    }
 
     //Create 글작성
     @Transactional
@@ -57,7 +61,10 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
         // 2. 조회수를 1 올립니다. (이때 메모리 안에서만 1)
-        post.increaseViewCount();
+//        post.increaseViewCount();
+        // 2. redis 로 수정
+        String redisKey = "post:viewCount:" + postId;
+        redisTemplate.opsForValue().increment(redisKey);
 
         // 3. @Transactional이 붙어있기 때문에, 이 메서드가 끝날 때 Spring이 알아서 바뀐 값(1)을 DB에 UPDATE 해줍니다.
         return PostResponse.from(post);

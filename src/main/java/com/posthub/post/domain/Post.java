@@ -61,6 +61,12 @@ public class Post {
         this.board = getBoard();    // 이렇게 하면 SetBoard 하지 않고 board id를 가져올수 있겠지 ?
     }
 
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+        // 필요하다면 여기서 검증 로직을 넣을 수도 있습니다.
+    }
+
 
     public void update(String title, String content){
         this.title = title;

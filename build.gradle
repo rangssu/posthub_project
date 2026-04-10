@@ -33,6 +33,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 
     runtimeOnly 'com.mysql:mysql-connector-j'
