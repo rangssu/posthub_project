@@ -2,6 +2,7 @@ package com.posthub.post.dto;
 
 import com.posthub.post.domain.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Getter
+@NoArgsConstructor
 public class PostListResponse {
     private Long id;
     private String title;

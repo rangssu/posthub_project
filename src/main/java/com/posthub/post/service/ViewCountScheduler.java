@@ -19,7 +19,7 @@ public class ViewCountScheduler {
     private final PostRepository postRepository;
 
     // 10분마다 실행 (600,000ms)
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 600000)
     @Transactional
     public void syncViewCountFromRedis() {
         log.info(">>> 조회수 DB 동기화 스케줄러 시작");
