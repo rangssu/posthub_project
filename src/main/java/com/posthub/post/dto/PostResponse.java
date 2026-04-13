@@ -2,10 +2,12 @@ package com.posthub.post.dto;
 
 import com.posthub.post.domain.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor(force = true)
 public class PostResponse {
 
     private final Long id;

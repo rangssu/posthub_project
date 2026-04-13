@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param; // 👇 [추가] Param 임포트
 
+import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 //    Page<Post> findByBoardIdOrderByIdDesc(Long boardId, Pageable pageable);
@@ -37,7 +38,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("UPDATE Post p SET p.viewCount = p.viewCount + :increaseCount WHERE p.id = :postId")
     void updateViewCount(@Param("postId") Long postId, @Param("increaseCount") Long increaseCount);
 
-
+    // ✨ [실시간 인기글용 추가] 랭킹에 등록된 게시글 ID 여러 개를 한 번에 가져오는 최적화 쿼리
+    @Query("SELECT new com.posthub.post.dto.PostListResponse(" +
+            "p.id, p.title, p.viewCount, p.createdAt, u.id, u.nickname, size(p.comments)) " +
+            "FROM Post p " +
+            "JOIN p.user u " +
+            "WHERE p.id IN :postIds")
+    List<PostListResponse> findOptimizedByIds(@Param("postIds") List<Long> postIds);
 }
 
 // 👇 [수정됨] 작성자(user)와 댓글(comments)을 모두 fetch join으로 한 번에 가져옵니다.
