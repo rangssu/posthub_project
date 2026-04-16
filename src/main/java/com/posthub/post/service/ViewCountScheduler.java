@@ -10,6 +10,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Redis에 임시 저장된 조회수를 주기적으로 DB에 동기화하는 스케줄러.
+ * DB Write 부하를 줄이기 위해 Write-Back 전략을 응용함.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,7 +22,6 @@ public class ViewCountScheduler {
     private final StringRedisTemplate redisTemplate;
     private final PostRepository postRepository;
 
-    // 1분마다 실행 (60,000ms)
     @Scheduled(fixedDelay = 60000)
     @Transactional
     public void syncViewCountFromRedis() {
@@ -32,18 +35,13 @@ public class ViewCountScheduler {
         while (cursor.hasNext()) {
             String key = cursor.next();
             try {
-                // 키 형식 예시: post:viewCount:123
                 String[] parts = key.split(":");
                 Long postId = Long.parseLong(parts[2]);
 
                 String value = redisTemplate.opsForValue().get(key);
                 if (value != null) {
                     Long increaseCount = Long.parseLong(value);
-
-                    // DB 업데이트
                     postRepository.updateViewCount(postId, increaseCount);
-
-                    // 반영 완료된 키는 Redis에서 삭제 (다음 주기를 위해)
                     redisTemplate.delete(key);
                     count++;
                 }
@@ -51,7 +49,6 @@ public class ViewCountScheduler {
                 log.error("조회수 동기화 중 에러 발생 (key: {}): {}", key, e.getMessage());
             }
         }
-
         log.info(">>> 조회수 DB 동기화 완료 (총 {}개의 게시글 반영)", count);
     }
 }

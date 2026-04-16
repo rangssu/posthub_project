@@ -28,7 +28,7 @@ public class PostController {
         return ResponseEntity.ok(postId);
     }
 
-    // ✨ [추가됨] 실시간 인기글 TOP 10 조회
+    // ✨ 실시간 인기글 TOP 10 조회
     // 반드시 상세 조회({postId}) 보다 위에 있어야 정상 동작합니다.
     @GetMapping("/posts/ranking")
     public ResponseEntity<List<PostListResponse>> getTrendingPosts() {
@@ -56,7 +56,7 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    // 글목록ㅇㄹ기
+    // 글목록 읽기
     @GetMapping("/boards/{boardId}/posts")
     public Page<PostListResponse> postList(@PathVariable Long boardId, @PageableDefault(size = 10) Pageable pageable) {
         return postService.getPostByBoard(boardId, pageable);

@@ -8,7 +8,6 @@ import com.posthub.post.domain.Post;
 import com.posthub.post.repository.PostRepository;
 import com.posthub.user.domain.User;
 import com.posthub.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    //글작성
     @Transactional
     public Long createComments(Long userId, Long postId, CommentRequest request) {
         User user = getUserOrThrow(userId);
@@ -52,26 +50,10 @@ public class CommentService {
 
     @Transactional
     public void deleteComments(Long userId, Long commentId) {
-        System.out.print("서비스 들어옴");
         Comment comment = getCommentOrThrow(commentId);
-        System.out.print("2번 지남");
         validateAuthorOrThrow(comment, userId);
-        System.out.print("3번 지남.");
         commentRepository.deleteById(commentId);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /* 여기 아래는 오류임 */
     private Comment getCommentOrThrow(Long commentId) {

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "users")     // 없으니까 안됨 왜지 ?
+@Table(name = "users")     /// 관례에 따른 테이블명 명시
 public class User {
 
     @Id
@@ -52,6 +52,10 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * 회원 정보 수정 (비밀번호, 닉네임)
+     * 변경 가능한 필드에 대해서만 선택적으로 업데이트 수행
+     */
     public void updateUser(String password, String nickname){
         if (password != null && !password.isBlank()) {
             this.password = password;
@@ -59,15 +63,6 @@ public class User {
         if (nickname != null && !nickname.isBlank() ) {
             this.nickname = nickname;
         }
-//        if (name!=null && !name.isBlank() ) {
-//            this.name = name;
-//        }
-//        if (email != null && !email.isBlank() ) {
-//            this.email = email;
-//        }     이메일은 수정할 필요가 없잖아 ? 아마두.
-
-
-
 
     }
 

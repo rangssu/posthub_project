@@ -1,8 +1,6 @@
 package com.posthub.user.service;
 
 import com.posthub.user.domain.User;
-import com.posthub.user.dto.LoginRequest;
-import com.posthub.user.dto.LoginResponse;
 import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.repository.UserRepository;
@@ -19,15 +17,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // 메서드 생성시 이름으로 기능을 알 수 있게 생성하기.
+
     @Transactional
     public Long createUser(User user) {
-        // 👇 [추가] 아이디 중복 체크
+        // 아이디 및 닉네임 중복 여부 사전 검증
         if (userRepository.existsByLoginId(user.getLoginId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다.");
         }
-
-        // 👇 [추가] 닉네임 중복 체크
         if (userRepository.existsByNickname(user.getNickname())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다.");
         }
@@ -40,7 +36,7 @@ public class UserService {
     public UserResponseDto updateUser(Long id, UserUpdateRequestDto requestDto) {
         User user = findUserById(id);
 
-        // 👇 [추가] 닉네임을 수정하려고 할 때, 기존 본인 닉네임과 다르면서 이미 존재하는 닉네임인지 체크
+        // 닉네임 변경 시, 기존 본인 닉네임과 다른 경우에만 중복 체크 수행
         if (requestDto.getNickname() != null && !requestDto.getNickname().equals(user.getNickname())) {
             if (userRepository.existsByNickname(requestDto.getNickname())) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다.");
@@ -72,17 +68,4 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다. id=" + id));
     }
-
-//    //로그인
-//    public LoginResponse login (LoginRequest req){
-//        User user = userRepository.findByLoginId(req.getLoginId())
-//                .orElseThrow(()-> new IllegalArgumentException("아이디가 존재하지 않습니다."));
-//
-//        if (!user.getPassword().equals(req.getPassword())) {
-//            throw new IllegalArgumentException("비밀번호가 옳지 않습니다.");
-//        }
-//
-//        return new LoginResponse(user.getId(), user.getName());
-//    }
-
 }

@@ -1,12 +1,10 @@
 package com.posthub.comment.domain;
 
-import com.posthub.board.domain.Board;
 import com.posthub.post.domain.Post;
 import com.posthub.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.util.Lazy;
 
 import java.time.LocalDateTime;
 
@@ -41,12 +39,9 @@ public class Comment {
 
     public void updateContent(String content) {
         this.content = content;
-
     }
 
     public boolean validateAuthor(Long userId) {
         return user.getId() != null && user.getId().equals(userId);
     }
-
-
 }

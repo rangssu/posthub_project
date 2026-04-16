@@ -4,8 +4,8 @@ import com.posthub.auth.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,47 +23,28 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                // ★ 1. Security에도 CORS 허용 설정을 켜줍니다.
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // JWT 쓸 거라 세션/폼로그인 기반 기능은 꺼둠
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-
-                // 세션 사용 안 함 (JWT 방식)
+                // JWT 사용을 위한 세션 정책 설정
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // 허용/차단 규칙
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인(토큰 발급) API는 열어둠
-
-                        .requestMatchers(HttpMethod.POST, "/api/users","/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/*").permitAll()
-
-                        // 👇 [수정됨] 정확히 떨어지는 경로인 "/api/boards"와 "/api/posts"를 반드시 명시해야 합니다!
-                        .requestMatchers(HttpMethod.GET, "/api/boards", "/api/boards/**", "/api/posts", "/api/posts/**").permitAll()
-
-                        .requestMatchers(HttpMethod.GET, "/health").permitAll()
-                        // 그 외는 전부 인증 필요
+                        .requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/boards/**", "/api/posts/**", "/health").permitAll()
                         .anyRequest().authenticated()
                 )
+                // JWT 필터를 UsernamePasswordAuthenticationFilter 앞에 배치
                 .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ★ 2. 리액트(5173) 포트에서 오는 요청을 안전하다고 인식하게 해주는 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173",
-                "http://boxblognote.link",
-                "http://boxblognote.link:5173",
-                "https://boxblognote.link" // 나중에 HTTPS 적용을 대비해 미리 추가
-
-        )); // 리액트 주소
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://boxblognote.link"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // OPTIONS 필수!
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));

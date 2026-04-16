@@ -22,6 +22,7 @@ public class AuthService {
         User user = userRepository.findByLoginId(req.getLoginId())
                 .orElseThrow(()-> new RuntimeException("아이디가 존재하지 않습니다."));
 
+        // 암호화 적용 전 평문 비교 로직 (PasswordConfig 적용 시 BCrypt 등으로 변경 필요)
         if (!user.getPassword().equals(req.getPassword())) {
             throw new RuntimeException("비밀번호가 옳지 않습니다.");
         }

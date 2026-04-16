@@ -9,8 +9,6 @@ public class BoardResponse {
     private Long id;
     private String boardName;
 
-//    protected BoardResponse() {}
-
     public BoardResponse(Long id, String boardName) {
         this.id = id;
         this.boardName = boardName;

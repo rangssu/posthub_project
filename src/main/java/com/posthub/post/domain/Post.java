@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-// 👇 [여기 추가됨!] board_id와 id DESC를 묶어 완벽한 커버링/복합 인덱스를 생성합니다.
+// board_id와 id DESC를 결합한 인덱스를 생성하여 최신순 페이징 조회 성능을 최적화함
 @Table(name = "post", indexes = {
         @Index(name = "idx_board_id_id", columnList = "board_id, id DESC")
 })
@@ -42,15 +42,6 @@ public class Post {
     @OneToMany(mappedBy = "post",cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-/*
-    public Post(String title, String content){
-        this.title = title;
-        this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.viewCount = 0;
-        this.board = getBoard();    // 이렇게 하면 SetBoard 하지 않고 board id를 가져올수 있겠지 ?
-    }
-*/
     public Post(Board board, User user, String title, String content){
         this.board = board;
         this.user = user;
@@ -58,13 +49,6 @@ public class Post {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
-        this.board = getBoard();    // 이렇게 하면 SetBoard 하지 않고 board id를 가져올수 있겠지 ?
-    }
-
-    public Post(String title, String content) {
-        this.title = title;
-        this.content = content;
-        // 필요하다면 여기서 검증 로직을 넣을 수도 있습니다.
     }
 
 

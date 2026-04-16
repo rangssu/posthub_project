@@ -1,8 +1,6 @@
 package com.posthub.user.controller;
 
 import com.posthub.user.domain.User;
-import com.posthub.user.dto.LoginRequest;
-import com.posthub.user.dto.LoginResponse;
 import com.posthub.user.dto.UserResponseDto;
 import com.posthub.user.dto.UserUpdateRequestDto;
 import com.posthub.user.service.UserService;
